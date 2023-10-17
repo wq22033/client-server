@@ -89,13 +89,14 @@ func main() {
 			client := conn
 			clients[n] = conn
 			go handleClient(client, n, msgs)
+			n++
 
 		case msg := <-msgs:
 			//TODO Deal with a new message
 			// Send the message to all clients that aren't the sender
-			for i := 0; i < len(clients); i++ {
-				if i != msg.sender {
-					fmt.Fprintf(clients[i], msg.message)
+			for i, client := range clients {
+				if msg.sender != i {
+					fmt.Fprintf(client, msg.message)
 				}
 			}
 		}
