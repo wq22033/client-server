@@ -106,29 +106,29 @@ func (w *GOLWorker) Terminate(req bool, res *bool) error {
 }
 
 func main() {
-	pAddr := flag.String("port", "8050", "Port to listen on")
-	pIP := flag.String("ip", getOutboundIP(), "IP address of worker")
-	brokerAddr := flag.String("broker", "127.0.0.1:8030", "Address of broker instance")
-	flag.Parse()
-	broker, _ = rpc.Dial("tcp", *brokerAddr)
-	status := new(stubs.StatusReport)
-	address := *pIP + ":" + *pAddr
-	fmt.Println(address)
-
-	rpc.Register(&GOLWorker{})
-	listener, err := net.Listen("tcp", ":"+*pAddr)
-	if err != nil {
-		panic(err)
-	}
-	broker.Call(stubs.Subscribe, stubs.Subscription{Address: address}, status)
-	defer listener.Close()
-	rpc.Accept(listener)
-	flag.Parse()
-	// pAddr := flag.String("port", "8030", "Port to listen on")
+	// pAddr := flag.String("port", "8050", "Port to listen on")
+	// pIP := flag.String("ip", getOutboundIP(), "IP address of worker")
+	// brokerAddr := flag.String("broker", "127.0.0.1:8030", "Address of broker instance")
 	// flag.Parse()
+	// broker, _ = rpc.Dial("tcp", *brokerAddr)
+	// status := new(stubs.StatusReport)
+	// address := *pIP + ":" + *pAddr
+	// fmt.Println(address)
+
 	// rpc.Register(&GOLWorker{})
-	// listener, _ := net.Listen("tcp", ":"+*pAddr)
+	// listener, err := net.Listen("tcp", ":"+*pAddr)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// broker.Call(stubs.Subscribe, stubs.Subscription{Address: address}, status)
 	// defer listener.Close()
 	// rpc.Accept(listener)
+	// flag.Parse()
+	pAddr := flag.String("port", "8030", "Port to listen on")
+	flag.Parse()
+	rpc.Register(&GOLWorker{})
+	listener, _ := net.Listen("tcp", ":"+*pAddr)
+	defer listener.Close()
+	rpc.Accept(listener)
 
 }
